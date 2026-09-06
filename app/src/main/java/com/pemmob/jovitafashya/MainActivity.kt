@@ -55,12 +55,20 @@ fun LayoutTentangJualan() {
         // Lingkaran abu-abu dengan teks
         Box(
             modifier = Modifier
-                .size(100.dp)
+                .size(200.dp)
                 .clip(CircleShape)
                 .background(Color.Gray),
             contentAlignment = Alignment.Center
         ) {
-            Text("Jualan", color = Color.White, fontWeight = FontWeight.Bold)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                androidx.compose.foundation.Image(
+                    painter = androidx.compose.ui.res.painterResource(id = com.pemmob.jovitafashya.R.mipmap.ic_launcher_round),
+                    contentDescription = "Jualan",
+                    modifier = Modifier.size(150.dp),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                )
+                Text("Jualan", color = Color.White, fontWeight = FontWeight.Bold)
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
