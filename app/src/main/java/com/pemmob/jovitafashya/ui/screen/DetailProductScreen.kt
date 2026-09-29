@@ -1,0 +1,151 @@
+package com.pemmob.jovitafashya.ui.screen
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.pemmob.jovitafashya.R
+import com.pemmob.jovitafashya.data.dummy.DummyData
+import com.pemmob.jovitafashya.data.model.Product
+import kotlinx.coroutines.delay
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetailProductScreen(productId: Int, navController: NavController?) {
+    var isLoading by remember { mutableStateOf(true) }
+    var product by remember { mutableStateOf<Product?>(null) }
+    var quantity by rememberSaveable { mutableStateOf(1) }
+    
+    LaunchedEffect(key1 = productId) {
+        isLoading = true
+        delay(1000) // Simulasi loading server lambat
+        product = DummyData.products.find { it.id == productId }
+        isLoading = false
+    }
+    
+    StatelessDetailProduct(
+        product = product,
+        isLoading = isLoading,
+        quantity = quantity,
+        onQuantityChange = { quantity = it },
+        onBackClick = { navController?.popBackStack() },
+        onAddToCartClick = { /*TODO*/ }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StatelessDetailProduct(
+    product: Product?,
+    isLoading: Boolean,
+    quantity: Int,
+    onQuantityChange: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    onAddToCartClick: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Detail Produk") },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(painterResource(id = R.drawable.back_icon), contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else if (product != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(state = rememberScrollState())
+            ) {
+                val imageRes = if (product.img == "dummy_product") R.drawable.dummy_product else {
+                    when (product.img) {
+                        "img_kripik" -> R.drawable.img_kripik
+                        "img_mendoan" -> R.drawable.img_mendoan
+                        "img_sale_pisang" -> R.drawable.img_sale_pisang
+                        "img_getuk" -> R.drawable.img_getuk
+                        "img_nopia" -> R.drawable.img_nopia
+                        "img_es_dawet" -> R.drawable.img_es_dawet
+                        "img_kopi" -> R.drawable.img_kopi
+                        "img_wedang_jahe" -> R.drawable.img_wedang_jahe
+                        "img_teh_poci" -> R.drawable.img_teh_poci
+                        "img_sirup" -> R.drawable.img_sirup
+                        "img_batik" -> R.drawable.img_batik
+                        "img_sandal" -> R.drawable.img_sandal
+                        "img_sapu" -> R.drawable.img_sapu
+                        "img_gantungan" -> R.drawable.img_gantungan
+                        "img_tas" -> R.drawable.img_tas
+                        else -> R.drawable.dummy_product
+                    }
+                }
+                
+                Image(
+                    painterResource(id = imageRes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(280.dp)
+                )
+                
+                Column(modifier = Modifier.padding(all = 16.dp)) {
+                    Text(product.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Text("Rp ${product.price}", style = MaterialTheme.typography.titleLarge)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Deskripsi", fontWeight = FontWeight.Bold)
+                    Text(product.description ?: "")
+                    Text("Stok: ${product.stock}")
+                    
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Jumlah Beli")
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            FilledTonalIconButton(
+                                onClick = { if (quantity > 1) onQuantityChange(quantity - 1) },
+                                enabled = quantity > 1
+                            ) { Text("-") }
+                            Text(quantity.toString(), modifier = Modifier.padding(horizontal = 16.dp))
+                            FilledTonalIconButton(
+                                onClick = { if (quantity < product.stock) onQuantityChange(quantity + 1) },
+                                enabled = quantity < product.stock
+                            ) { Text("+") }
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Button(
+                        onClick = onAddToCartClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        enabled = product.stock > 0 && quantity > 0
+                    ) {
+                        Text("Tambah ke Keranjang")
+                    }
+                }
+            }
+        }
+    }
+}
