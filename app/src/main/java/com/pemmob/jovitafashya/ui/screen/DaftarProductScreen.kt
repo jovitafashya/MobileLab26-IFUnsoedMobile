@@ -141,14 +141,19 @@ fun DaftarProdukScreen(navController: NavController? = null) {
 
     LaunchedEffect(key1 = selectedCategoryId, key2 = searchQuery) {
         isLoading = true
-        delay(1000)
-        filteredProducts = if (selectedCategoryId != null) {
+        
+        delay(timeMillis = 1000)
+        
+        val filteredByCategory = if (selectedCategoryId != null) {
             DummyData.products.filter { it.category_id == selectedCategoryId }
+        } else DummyData.products
+        
+        filteredProducts = if (searchQuery.isBlank()) {
+            filteredByCategory
         } else {
-            DummyData.products
-        }.filter {
-            if (searchQuery.isNotBlank()) it.name.contains(searchQuery, ignoreCase = true) else true
+            filteredByCategory.filter { it.name.contains(other = searchQuery, ignoreCase = true) }
         }
+        
         isLoading = false
     }
 
@@ -160,8 +165,8 @@ fun DaftarProdukScreen(navController: NavController? = null) {
         onSearchQueryChange = { searchQuery = it },
         isLoading = isLoading,
         products = filteredProducts,
-        onProductClick = { product -> navController?.navigate("detail/${product.id}") },
-        onContactUsClick = { navController?.navigate("hubungi_kami") }
+        onProductClick = { product -> navController?.navigate(route = "detail/${product.id}") },
+        onContactUsClick = { navController?.navigate(route = "hubungi_kami") }
     )
 }
 
@@ -244,7 +249,7 @@ fun StatelessDaftarProduct(
             Text(
                 text = "Kategori Produk",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                modifier = Modifier.padding(all = 16.dp)
             )
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),

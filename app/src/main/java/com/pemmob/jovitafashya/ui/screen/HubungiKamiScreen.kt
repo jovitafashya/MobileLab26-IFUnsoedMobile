@@ -24,7 +24,7 @@ fun HubungiKamiScreen(navController: NavController?) {
     var isAgreed by rememberSaveable { mutableStateOf(false) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    val isEmailValid = emailText.contains("@") && emailText.isNotBlank()
+    val isEmailValid = emailText.contains(other = "@") && emailText.isNotBlank()
     val isMessageValid = messageText.length >= 10
     val isFormValid = isEmailValid && isMessageValid && isAgreed && problemType != "Pilih Tipe Pesan"
 
@@ -124,8 +124,8 @@ fun StatelessFormHubungiKami(
                     contentDescription = "Email"
                 )
             },
-            isError = email.isNotEmpty() && !isEmailValid,
-            supportingText = { if (email.isNotEmpty() && !isEmailValid) Text("Format Email Salah") },
+            isError = email.isNotEmpty()&&!isEmailValid,
+            supportingText = {if(email.isNotEmpty()&&!isEmailValid) Text("Format Email Salah")},
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
         )
@@ -223,7 +223,7 @@ fun StatelessFormHubungiKami(
                     painter = painterResource(id = R.drawable.send_icon),
                     contentDescription = "Send"
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
                 Text("Kirim Pesan", style = MaterialTheme.typography.labelLarge)
             }
         }

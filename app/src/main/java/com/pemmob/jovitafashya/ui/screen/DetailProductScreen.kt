@@ -75,26 +75,7 @@ fun StatelessDetailProduct(
                     .padding(paddingValues)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                val imageRes = if (product.img == "dummy_product") R.drawable.dummy_product else {
-                    when (product.img) {
-                        "img_kripik" -> R.drawable.img_kripik
-                        "img_mendoan" -> R.drawable.img_mendoan
-                        "img_sale_pisang" -> R.drawable.img_sale_pisang
-                        "img_getuk" -> R.drawable.img_getuk
-                        "img_nopia" -> R.drawable.img_nopia
-                        "img_es_dawet" -> R.drawable.img_es_dawet
-                        "img_kopi" -> R.drawable.img_kopi
-                        "img_wedang_jahe" -> R.drawable.img_wedang_jahe
-                        "img_teh_poci" -> R.drawable.img_teh_poci
-                        "img_sirup" -> R.drawable.img_sirup
-                        "img_batik" -> R.drawable.img_batik
-                        "img_sandal" -> R.drawable.img_sandal
-                        "img_sapu" -> R.drawable.img_sapu
-                        "img_gantungan" -> R.drawable.img_gantungan
-                        "img_tas" -> R.drawable.img_tas
-                        else -> R.drawable.dummy_product
-                    }
-                }
+                val imageRes = if (product.img == "dummy_product") R.drawable.dummy_product else R.drawable.dummy_product
                 
                 Image(
                     painterResource(id = imageRes),
