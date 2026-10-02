@@ -1,6 +1,7 @@
 package com.pemmob.jovitafashya.ui.screen
 
-import androidx.compose.foundation.Image
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,44 +10,62 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.pemmob.jovitafashya.R
-import com.pemmob.jovitafashya.data.dummy.DummyData
 import com.pemmob.jovitafashya.data.model.Product
-import kotlinx.coroutines.delay
+import com.pemmob.jovitafashya.ui.viewmodel.ProductUiState
+import com.pemmob.jovitafashya.ui.viewmodel.ProductViewModel
+import com.pemmob.jovitafashya.util.JualanConstants.BASE_URL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailProductScreen(productId: Int, navController: NavController?) {
-    var isLoading by remember { mutableStateOf(true) }
-    var product by remember { mutableStateOf<Product?>(null) }
+fun DetailProductScreen(productId: Int, navController: NavController?, viewModel: ProductViewModel) {
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsState()
     var quantity by rememberSaveable { mutableStateOf(1) }
     
-    LaunchedEffect(key1 = productId) {
-        isLoading = true
-        delay(1000) // Simulasi loading server lambat
-        product = DummyData.products.find { it.id == productId }
-        isLoading = false
+    when (val state = uiState) {
+        is ProductUiState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        is ProductUiState.Error -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Error: ${state.message}", color = MaterialTheme.colorScheme.error)
+            }
+        }
+        is ProductUiState.Success -> {
+            val product = state.products.find { it.id == productId }
+            if (product == null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Produk tidak ditemukan.")
+                }
+            } else {
+                StatelessDetailProduct(
+                    product = product,
+                    quantity = quantity,
+                    onQuantityChange = { quantity = it },
+                    onBackClick = { navController?.popBackStack() },
+                    onAddToCartClick = {
+                        Toast.makeText(context, "Membeli sebanyak $quantity", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+        }
     }
-    
-    StatelessDetailProduct(
-        product = product,
-        isLoading = isLoading,
-        quantity = quantity,
-        onQuantityChange = { quantity = it },
-        onBackClick = { navController?.popBackStack() },
-        onAddToCartClick = { /*TODO*/ }
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatelessDetailProduct(
     product: Product?,
-    isLoading: Boolean,
     quantity: Int,
     onQuantityChange: (Int) -> Unit,
     onBackClick: () -> Unit,
@@ -64,26 +83,33 @@ fun StatelessDetailProduct(
             )
         }
     ) { paddingValues ->
-        if (isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        } else if (product != null) {
+        if (product != null) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                val imageRes = if (product.img == "dummy_product") R.drawable.dummy_product else R.drawable.dummy_product
+                val imageModel: Any = if (product.img == "dummy_product") {
+                    R.drawable.dummy_product
+                } else {
+                    "$BASE_URL/img/${product.img}"
+                }
                 
-                Image(
-                    painterResource(id = imageRes),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(280.dp)
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    AsyncImage(
+                        model = imageModel,
+                        contentDescription = product.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clip(shape = androidx.compose.foundation.shape.RoundedCornerShape(size = 8.dp))
+                            .background(color = androidx.compose.ui.graphics.Color.White),
+                        contentScale = androidx.compose.ui.layout.ContentScale.Fit
+                    )
+                }
                 
                 Column(modifier = Modifier.padding(all = 16.dp)) {
                     Text(product.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
