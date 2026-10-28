@@ -1,4 +1,4 @@
-# Identitas Diri
+
 - **Nama:** Jovita Fashya Islami
 - **NIM:** H1D024125
 - **Shift KRS:** Shift B
@@ -8,7 +8,7 @@
 
 # Modul 2: Pemrograman Mobile (Flutter)
 
-Pada Modul 2 ini, saya mempelajari dasar-dasar pengembangan aplikasi mobile menggunakan framework **Flutter** dan bahasa pemrograman **Dart**. Materi yang dipelajari mencakup konsep dasar widget, penyusunan tata letak (*layouting*), pembuatan formulir input, pengelolaan *state*, serta penyajian data dalam bentuk daftar (*list*).
+Pada Modul 2 ini, saya mempelajari dasar-dasar pengembangan aplikasi mobile menggunakan framework Flutter dan bahasa pemrograman Dart. Materi yang dipelajari mencakup konsep dasar widget, penyusunan tata letak (*layouting*), pembuatan formulir input, pengelolaan *state*, serta penyajian data dalam bentuk daftar (*list*).
 
 ---
 
