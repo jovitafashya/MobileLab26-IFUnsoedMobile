@@ -23,8 +23,5 @@ Pada praktikum Modul 2 ini, saya mempelajari dasar-dasar pengembangan aplikasi m
 ### 3. Widget Row
 ![Widget Row](screenshots/widget_row.jpg)
 
-### 4. Form Produk
-![Form Produk](screenshots/form_produk.jpg)
-
-### 5. List Data Produk
+### 4. List Data Produk
 ![List Data Produk](screenshots/list_produk.jpg)
