@@ -1,17 +1,28 @@
-# router_flutter
+* Nama: Jovita Fashya Islami
+* NIM: H1D024125
+* Shift KRS: Shift B
+* Shift Praktikum: Shift I
 
-A new Flutter project.
+# Modul 3 - Pemrograman Mobile Flutter
 
-## Getting Started
+Pada praktikum Modul 3 ini, mempelajari cara membuat aplikasi Flutter yang memiliki sistem login, navigasi antar halaman, dan penyimpanan data lokal. Materi mencakup pembuatan halaman login menggunakan `TextField` dan `TextEditingController`, penyimpanan username ke local storage dengan package `shared_preferences`, penampilan kembali data yang tersimpan pada halaman Home, pembuatan side menu menggunakan `Drawer` dan `ListTile`, serta perpindahan antar halaman dengan `Navigator.push` dan `MaterialPageRoute`.
 
-This project is a starting point for a Flutter application.
+## Hasil Praktikum
 
-A few resources to get you started if this is your first Flutter project:
+### 1. Halaman Login
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Halaman login berisi input username dan password. Jika username dan password yang dimasukkan adalah `admin`, akan muncul dialog berhasil login lalu aplikasi berpindah ke halaman Home. Username yang digunakan juga disimpan ke local storage.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Halaman Login](screenshots/login.png)
+
+### 2. Side Menu
+
+Side menu dibuat menggunakan widget `Drawer` yang berisi menu Home dan About untuk berpindah antar halaman.
+
+![Side Menu](screenshots/sidemenu.png)
+
+### 3. Halaman Home
+
+Halaman Home menampilkan username yang sudah disimpan pada local storage saat login, sehingga tampilan sesuai dengan user yang masuk.
+
+![Halaman Home](screenshots/home.png)
