@@ -15,14 +15,15 @@ Halaman login berisi input username dan password. Jika username dan password yan
 
 ![Halaman Login](screenshots/login.jpeg)
 
-### 2. Side Menu
+### 2. Halaman Home
+
+Halaman Home menampilkan username yang sudah disimpan pada local storage saat login, sehingga tampilan sesuai dengan user yang masuk.
+
+![Halaman Home](screenshots/home.jpeg)
+
+### 3. Side Menu
 
 Side menu dibuat menggunakan widget `Drawer` yang berisi menu Home dan About untuk berpindah antar halaman.
 
 ![Side Menu](screenshots/sidemenu.jpeg)
 
-### 3. Halaman Home
-
-Halaman Home menampilkan username yang sudah disimpan pada local storage saat login, sehingga tampilan sesuai dengan user yang masuk.
-
-![Halaman Home](screenshots/home.jpeg)
