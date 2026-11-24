@@ -46,3 +46,42 @@ Halaman yang menampilkan rincian informasi lengkap dari produk yang dipilih pada
 Halaman formulir edit yang terbuka ketika tombol EDIT pada halaman detail produk ditekan. Input field pada halaman ini secara otomatis terisi dengan data produk yang sudah ada sebelumnya (*pre-filled*), sehingga pengguna dapat memperbarui informasi produk dan menekan tombol Ubah untuk menyimpan perubahannya.
 
 ![Halaman Ubah Produk](screenshots/ubah_produk.png)
+
+
+---
+
+# Modul 4 (Lanjutan) - Pertemuan Terakhir: CRUD dengan REST API
+
+Pada pertemuan terakhir Modul 4 ini, aplikasi **Toko Kita** dikembangkan dari yang sebelumnya hanya berupa tampilan (UI) dengan data statis menjadi aplikasi yang terhubung langsung ke **REST API**. Seluruh proses registrasi, login, dan pengelolaan data produk (Create, Read, Update, Delete) kini dijalankan melalui request ke server.
+
+## Yang Dipelajari
+
+1. **Menambahkan Dependency:** Menggunakan package `http` untuk mengirim dan menerima request ke REST API, serta `shared_preferences` untuk menyimpan token secara lokal di perangkat.
+2. **Helper Module:**
+   - `user_info.dart`: menyimpan, mengambil, dan menghapus token serta user ID (dipakai untuk login dan logout).
+   - `app_exception.dart`: kumpulan class exception untuk menangani berbagai jenis error saat berkomunikasi dengan API.
+   - `api.dart`: fungsi `POST`, `GET`, dan `DELETE` yang otomatis menyertakan token (`Bearer`) pada header, serta memetakan status code respons ke exception yang sesuai.
+   - `api_url.dart`: menyimpan seluruh endpoint API di satu tempat agar mudah dikelola.
+3. **Bloc (Controller):** Memisahkan logika bisnis dari tampilan melalui `RegistrasiBloc`, `LoginBloc`, `LogoutBloc`, dan `ProdukBloc`, sehingga UI cukup memanggil fungsi tanpa mengurus detail request.
+4. **Common Dialog Widget:** Membuat `SuccessDialog` dan `WarningDialog` sebagai komponen yang dapat dipakai ulang untuk menampilkan hasil proses (berhasil atau gagal).
+5. **Session Login:** Memodifikasi `main.dart` agar aplikasi mengecek token saat dibuka. Jika token ada, langsung masuk ke halaman List Produk. Jika tidak, masuk ke halaman Login.
+6. **Menampilkan Data dari API:** Menggunakan `FutureBuilder` untuk mengambil daftar produk dari server dan menampilkannya dengan `ListView.builder`, lengkap dengan indikator loading.
+7. **Operasi CRUD:**
+   - **Create:** menambah produk baru lewat form dan `ProdukBloc.addProduk`.
+   - **Read:** menampilkan daftar produk dan detail produk.
+   - **Update:** mengubah data produk dengan form yang terisi otomatis (pre-filled) melalui `ProdukBloc.updateProduk`.
+   - **Delete:** menghapus produk setelah konfirmasi lewat `ProdukBloc.deleteProduk`.
+8. **Penanganan Error & Asynchronous:** Menggunakan `Future`, `async/await`, `.then()`, dan `onError` untuk menangani proses yang berjalan secara asinkron, serta menampilkan dialog gagal saat request bermasalah.
+9. **Konfigurasi Android:** Menambahkan izin `INTERNET` dan `usesCleartextTraffic` pada `AndroidManifest.xml` agar aplikasi dapat mengakses API berbasis `http://`.
+
+## Hasil Praktikum
+
+### 1. Registrasi Berhasil
+Data registrasi dikirim ke REST API melalui `RegistrasiBloc`. Jika berhasil, muncul dialog **SUKSES** dengan pesan "Registrasi berhasil, silahkan login".
+
+![Registrasi Berhasil](screenshots/registrasi_sukses.png)
+
+### 2. Login Gagal
+Jika email atau password tidak sesuai, atau server tidak dapat dihubungi, aplikasi menangkap error melalui `onError` dan menampilkan dialog **GAGAL** dengan pesan "Login gagal, silahkan coba lagi".
+
+![Login Gagal](screenshots/login_gagal.png)
